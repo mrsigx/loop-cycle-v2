@@ -1,0 +1,39 @@
+[package]
+name = "loop-cycle"
+version = "2.0.0"
+edition = "2021"
+publish = false
+license-file = "LICENSE"
+readme = "README.md"
+description = "Operator-started foreground multi-agent review and execution conductor with OS process containment, fail-closed 16 MiB stream capture, and pre-stage secret quarantine"
+
+[dependencies]
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = "=1.0.154"
+sha2 = "=0.10.9"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "loop-cycle"
+path = "src/main.rs"
+
+[features]
+# Builds the scripted fake agent and output helper used by the offline end-to-end tests.
+fakes = []
+
+[[bin]]
+name = "lc-fake-agent"
+path = "src/bin/lc-fake-agent.rs"
+required-features = ["fakes"]
+
+[[bin]]
+name = "lc-output-helper"
+path = "src/bin/lc-output-helper.rs"
+required-features = ["fakes"]
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
